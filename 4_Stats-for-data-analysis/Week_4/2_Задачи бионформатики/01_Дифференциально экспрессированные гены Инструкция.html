@@ -1,0 +1,277 @@
+<meta charset="utf-8"/>
+<co-content>
+ <h1 level="1">
+  Обнаружение статистически значимых отличий в уровнях экспрессии генов больных раком
+ </h1>
+ <p>
+  Это задание поможет вам лучше разобраться в методах множественной проверки гипотез и позволит применить ваши знания на данных из реального биологического исследования.
+ </p>
+ <h2 level="2">
+  В этом задании вы:
+ </h2>
+ <ul bullettype="bullets">
+  <li>
+   <p>
+    вспомните, что такое t-критерий Стьюдента и для чего он применяется
+   </p>
+  </li>
+  <li>
+   <p>
+    сможете применить технику множественной проверки гипотез и увидеть собственными глазами, как она работает на реальных данных
+   </p>
+  </li>
+  <li>
+   <p>
+    почувствуете разницу в результатах применения различных методов поправки на множественную проверку
+   </p>
+  </li>
+ </ul>
+ <h2 level="2">
+  Основные библиотеки и используемые методы:
+ </h2>
+ <p>
+  Библиотека scipy и основные статистические функции:
+  <a href="http://docs.scipy.org/doc/scipy/reference/stats.html#statistical-functions">
+   http://docs.scipy.org/doc/scipy/reference/stats.html#statistical-functions
+  </a>
+ </p>
+ <p>
+  Библиотека statmodels для методов коррекции при множественном сравнении:
+ </p>
+ <p>
+  <a href="http://statsmodels.sourceforge.net/devel/stats.html">
+   http://statsmodels.sourceforge.net/devel/stats.html
+  </a>
+ </p>
+ <p>
+  Статья, в которой рассматриваются примеры использования statsmodels для множественной проверки гипотез:
+ </p>
+ <p>
+  <a href="http://jpktd.blogspot.ru/2013/04/multiple-testing-p-value-corrections-in.html">
+   http://jpktd.blogspot.ru/2013/04/multiple-testing-p-value-corrections-in.html
+  </a>
+ </p>
+ <h2 level="2">
+  Описание используемых данных
+ </h2>
+ <p>
+  Данные для этой задачи взяты из исследования, проведенного в Stanford School of Medicine. В исследовании была предпринята попытка выявить набор  генов, которые позволили  бы более точно диагностировать возникновение рака груди на самых ранних стадиях.
+ </p>
+ <p>
+  В эксперименте принимали участие 24 человек, у которых не было рака груди (normal), 25 человек, у которых это заболевание было диагностировано на ранней стадии (early neoplasia), и 23 человека с сильно выраженными симптомами (cancer).
+ </p>
+ <img alt="" assetid="4X1xdyT5EeaOqxJVfwisfQ" src="data:image/png;base64,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zYEDB8zixYtN7dq1zV//+lezf/9+s3r1alO7dm3TuHFj8+GHH5qDBw+a0aNHm8jISHPmzBljjDHPPvus6dmzp9m5c6f55ZdfzMKFC01ERIRZsWKFMcaY6dOnm7Zt23pkG3lCXl6e6dGjh3nmmWfMzp07zf79+80rr7ximjZtajIzM40xxowfP960bdvWbNq0yRw7dsx89dVXJjIy0ixYsMAYc/3vxhhjdu3aZSIiIszu3bsd650+fbrp0qVLgTVdmbd3795m165dZvfu3aZ9+/amX79+LtfsyniqXbu26dy5s9m6datJTU017dq1M/3793fUER4ebv7xj3+4tA0mTJhgevToYfbs2WOOHj1q/u///s9ER0ebCxcuGGOMadWqlZk5c6Yxxph58+aZpk2bmh9//NH8+uuvZvXq1ebBBx80b7zxxn//hd5i+vfvbx555BGzbt06c/DgQfO3v/3NxMbGmrlz5153G61bt85ERESYrl27mtTUVJOWlmZ69+7t9G937Nixpnnz5ubbb781R44cMePGjTONGjUyp06dMrt27TJRUVHm/fffN0eOHDFr1641HTp0MCNGjHDMHx4ebpo3b2727Nljtm3b5vZtUxwIQA8JDw83kydPdvx89uxZEx4ebv75z38aY4xp1qyZmTp1qtM8kyZNMs2aNTPGXP6FFRERYQ4dOuTov9J25MgRR1u3bt1M7969HT/v37/fREREmO3btxtjjPnoo4/M/v37ndbTqlUr8+677xpjrBeAa9asMbVr1zZ2u92pvW3btmb27NnGGGP+8Y9/mE2bNjn19+7d2yQkJBhjrv3dXAlAY4zp1KmTmThxotPyk5OTC6zpyvIOHDjgaFuwYIGpV6+eyzW7Op727dvn6P/pp59MeHi4OXjwoDHGOQBvtA2ee+45069fP3P27FljjDHnz583//73v01WVpYxxjkAv/vuO/P99987LWv48OGmb9++BW4PX3XgwAETHh5uNmzY4GjLzMw0EydONMuWLbvuNlq3bp0JDw83P/zwg6N/xYoVJiIiwpw6dcrY7XZTp04ds2TJEkd/bm6uSUxMNAcPHjQvvfSSiY+Pd1p+amqqCQ8PN8ePHzfGXP7+p0yZUuSf25M4B+hBVz+YNTAwUJKUk5OjU6dO6cSJE6pfv77T9I0aNdK8efN06tQpSZcvrKhWrVq+5d51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uXPn6uGHH1bDhg3zTXOrKVu27C3/GQAOgQJuMHDgQAUEBGjRokWS8h8C3b17twYPHqymTZuqTp06iomJ0RtvvOH0gG273a6RI0fqgQceUKNGjTR27FhNnTpVsbGxjmliY2P1zjvvKDExUc2aNVO9evX09NNP68iRI071fP/99+rVq5caNGigBx98UGPGjFFmZqajPysrS6+88opiYmJUt25dPfLII5o/f76j/4+HQG80PeCN2AME3KBs2bKqW7euUlNT8/XZbDb17t1bDRs2VGJiokqVKqXVq1fr/fffV0hIiPr37y/pcoimpaVp2LBhqlSpkubMmaPt27c7va9Nkj744AM1bNhQEydO1OnTp/Xaa69p1KhR+uijjyRJKSkpSkhIUNeuXTV48GD99ttvSkpK0tatW/XZZ58pICBAr7/+uv79739r5MiRqlSpklavXq1JkyYpKChIXbp0keT8cGRXpge8DQEIuEnlypULfMvG3r17Vbt2bU2bNs3x3rWmTZtqzZo12rBhg/r376+ffvpJGzdu1HvvvaeHHnpIktSkSRP97//+b77l3XHHHZo5c6YjoA4fPqwZM2bIbrerbNmymjp1qlq1aqUJEyY45gkPD1ePHj2UkpKixx9/XBs2bNCDDz6odu3aSbr89vjbb79dd9xxh2Oeqy8fcGV6wNsQgICHtWjRQi1atFBubq7S0tJ0+PBh7d27V6dOnXLs3a1du1alS5d2hJ90+R1vMTExWr9+vdPyIiMjnfbOrrzg9sKFC7LZbDpx4oTat2+fb567775b69ev1+OPP64mTZro73//u9LT0xUTE+N4C/nVrl6HK9MD3oZzgICb2Gw2hYSE5Gs3xuitt95S48aN1aFDB7322mvavXu3AgICHHtZv//+e4F7U388/CldDsar+ftf/meel5fneHN85cqV881XqVIlnT17VpKUkJCgIUOG6NixY3rttdfUunVr9erVS3v27CnwsxV2esAbEICAG9jtdu3cudPxQtirzZ49W8nJyRo7dqw2bNigb7/9VklJSQoKCnJMExISolOnTuWb9+TJk4Wqo0KFCpKkEydO5Os7fvy4I2RLlSqlZ599Vl9++aW+++47jR07Vr/88otefvnlApdb2OkBb0AAAm4we/ZsZWdnq1evXvn6Nm3apPDwcHXp0kWBgYGSLu8t7t27V3l5eZIun1PLzs7Wjz/+6JgvOztbP/zwQ6HqqF69uipXrqzly5c7tW/btk1Hjx5VdHS0srOz1a5dO73//vuSLh9Cffzxx9W+fXulp6fnW2Zhpwe8BecAgSJkt9u1detWSdKlS5d06tQprVixQsuWLdOAAQNUt27dfPNERkZq5syZmjt3rqKionTo0CG99957ysnJ0YULFyRJjRs3VuPGjTV8+HANGTJEVapUUXJysk6ePKmwsDCX6/Pz89MLL7ygMWPGaPjw4erQoYPS09OVlJSkGjVqqEuXLrrtttsUGRmpd955R6VKlVJ4eLgOHDigJUuWOC5ykf5zEYyr0wPehgAEitD27dsde3l+fn4qV66cIiIiNHXqVKcw8PPzc1xEMmDAAGVmZmrBggWy2+0KDQ1V586d5e/vr/fee0/nzp1T2bJllZSUpAkTJigxMVF+fn7q2LGjAgMDdejQoQKXey3du3fX7bffrrlz5youLk7ly5dX69atNWTIEMdVqOPHj1dQUJDmz5+vEydOqFKlSurRo4eef/55p3Vd4cr0gLfhUWjALeDXX3/Vli1b1KZNG5UqVcrR/thjjyk0NJQ3ywM3gT1A4BYxfPhwff/99+rSpYvy8vL09ddfa+fOnRo2bJinSwNuSewBAreIn376Se+8845+/vlnXbp0Sffdd5/i4uL04IMPero04JZEAAIALInbIAAAlkQAAgAsiQAEAFgSAQgAsCQCEABgSQQgAMCS/h94hFea/NauvwAAAABJRU5ErkJggg=="/>
+ <p>
+  Ученые провели секвенирование биологического материала испытуемых, чтобы понять, какие из этих генов наиболее активны в клетках больных людей.
+ </p>
+ <p>
+  Секвенирование — это определение степени активности генов в анализируемом образце с помощью подсчёта количества соответствующей каждому гену РНК.
+ </p>
+ <p>
+  В данных для этого задания вы найдете именно эту количественную меру активности каждого из 15748 генов у каждого из 72 человек, принимавших участие в эксперименте.
+ </p>
+ <p>
+  Вам нужно будет определить те гены, активность которых у людей в разных стадиях заболевания отличается статистически значимо.
+ </p>
+ <p>
+  Кроме того, вам нужно будет оценить не только статистическую, но и практическую значимость этих результатов, которая часто используется в подобных исследованиях.
+ </p>
+ <p>
+  Диагноз человека содержится в столбце под названием "Diagnosis".
+ </p>
+ <h2 level="2">
+  Практическая значимость изменения
+ </h2>
+ <p>
+  Цель исследований — найти гены, средняя экспрессия которых отличается не только статистически значимо, но и достаточно сильно. В экспрессионных исследованиях для этого часто используется метрика, которая называется fold change (кратность изменения). Определяется она следующим образом:
+ </p>
+ <p hasmath="true">
+  \[ F_c(C, T) = \begin{cases} \frac{T}{C}, &amp; T &gt; C \\ -\frac{C}{T}, &amp; T &lt; C \end{cases} \]
+ </p>
+ <p hasmath="true">
+  где \( C, T \) — средние значения экспрессии гена в control и treatment группах соответственно. По сути, fold change показывает, во сколько раз отличаются средние двух выборок.
+ </p>
+ <h2 level="2">
+  Инструкции к решению задачи
+ </h2>
+ <p>
+  Задание состоит из трёх частей. Если не сказано обратное, то уровень значимости нужно принять равным 0.05.
+ </p>
+ <h3 level="3">
+  <strong>
+   Часть 1: применение t-критерия Стьюдента
+  </strong>
+ </h3>
+ <p>
+  В первой части вам нужно будет применить критерий Стьюдента для проверки гипотезы о равенстве средних в двух независимых выборках. Применить критерий для каждого гена нужно будет дважды:
+ </p>
+ <ol bullettype="numbers">
+  <li>
+   <p>
+    для групп
+    <strong>
+     normal (control)
+    </strong>
+    и
+    <strong>
+     early neoplasia (treatment)
+    </strong>
+   </p>
+  </li>
+  <li>
+   <p>
+    для групп
+    <strong>
+     early neoplasia (control)
+    </strong>
+    и
+    <strong>
+     cancer (treatment)
+    </strong>
+   </p>
+  </li>
+ </ol>
+ <p>
+  В качестве ответа в этой части задания необходимо указать количество статистически значимых отличий, которые вы нашли с помощью t-критерия Стьюдента, то есть число генов, у которых p-value этого теста оказался меньше, чем уровень значимости.
+ </p>
+ <p>
+  <strong>
+   Часть
+  </strong>
+  <strong>
+   2:
+  </strong>
+  <strong>
+   поправка методом Холма
+  </strong>
+ </p>
+ <p>
+  Для этой части задания вам понадобится модуль
+  <strong>
+   multitest
+  </strong>
+  из statsmodels.
+ </p>
+ <pre language="python">import statsmodels.stats.multitest as smm</pre>
+ <p>
+  В этой части задания нужно будет применить поправку Холма для получившихся двух наборов достигаемых уровней значимости из предыдущей части. Обратите внимание, что поскольку вы будете делать поправку для каждого из двух наборов p-value отдельно, то проблема, связанная с множественной проверкой останется.
+ </p>
+ <p>
+  Для того, чтобы ее устранить, достаточно воспользоваться поправкой Бонферрони, то есть использовать уровень значимости 0.05 / 2 вместо 0.05 для дальнейшего уточнения значений p-value c помощью метода Холма.
+ </p>
+ <p hasmath="true">
+  В качестве ответа к этому заданию требуется ввести количество значимых отличий в каждой группе после того, как произведена коррекция Холма-Бонферрони. Причем это число нужно ввести с учетом практической значимости: посчитайте для каждого значимого изменения fold change и выпишите в ответ число таких значимых изменений, абсолютное значение fold change которых больше, чем \(1.5\).
+ </p>
+ <p>
+  <strong>
+   Обратите внимание,
+  </strong>
+  <strong>
+   что
+  </strong>
+ </p>
+ <ul bullettype="bullets">
+  <li>
+   <p>
+    применять поправку на множественную проверку  нужно
+    <strong>
+     ко всем  значениям достигаемых уровней значимости, а не только для тех, которые меньше значения уровня доверия.
+    </strong>
+   </p>
+  </li>
+  <li>
+   <p>
+    при использовании поправки на уровне значимости 0.025
+    <strong>
+     меняются значения достигаемого уровня значимости, но не меняется значение уровня доверия
+    </strong>
+    (то есть для отбора значимых изменений скорректированные значения уровня значимости нужно сравнивать с порогом 0.025, а не 0.05)!
+   </p>
+  </li>
+ </ul>
+ <h3 level="3">
+  <strong>
+   Часть 3: поправка методом
+  </strong>
+  <strong>
+   Бенджамини-Хохберга
+  </strong>
+ </h3>
+ <p>
+  Данная часть задания аналогична второй части за исключением того, что нужно будет использовать метод Бенджамини-Хохберга.
+ </p>
+ <p hasmath="true">
+  Обратите внимание, что методы коррекции, которые контролируют FDR, допускает больше ошибок первого рода и имеют большую мощность, чем методы, контролирующие FWER. Большая мощность означает, что эти методы будут совершать меньше ошибок второго рода (то есть будут лучше улавливать отклонения от \(H_0\), когда они есть, и будут чаще отклонять \(H_0\), когда отличий нет).
+ </p>
+ <p>
+  В качестве ответа к этому заданию требуется  ввести количество значимых отличий в каждой группе после того, как произведена коррекция Бенджамини-Хохберга, причем так же, как и во второй части, считать только такие отличия, у которых abs(fold change) &gt; 1.5.
+ </p>
+ <h3 level="3">
+  <strong>
+   Данные для выполнения задания
+  </strong>
+ </h3>
+ <asset assettype="generic" extension="csv" id="iwZFDiW5Eea4ehL5RXz3EQ" name="gene_high_throughput_sequencing">
+ </asset>
+ <p>
+ </p>
+ <p hasmath="true">
+  <em>
+   P.S. Вспомните, какое значение имеет уровень значимости \(\alpha\) в каждой из поправок:  Холма и Бенджамини-Хохберга. Одинаковый ли смысл имеет уровень
+  </em>
+  <em>
+   значимости
+  </em>
+  <em>
+   в каждой из поправок?
+  </em>
+ </p>
+</co-content>
+<style>
+ body {
+    padding: 50px 85px 50px 85px;
+}
+
+table th, table td {
+    border: 1px solid #e0e0e0;
+    padding: 5px 20px;
+    text-align: left;
+}
+input {
+    margin: 10px;
+}
+}
+th {
+    font-weight: bold;
+}
+td, th {
+    display: table-cell;
+    vertical-align: inherit;
+}
+img {
+    height: auto;
+    max-width: 100%;
+}
+pre {
+    display: block;
+    margin: 20px;
+    background: #424242;
+    color: #fff;
+    font-size: 13px;
+    white-space: pre-wrap;
+    padding: 9.5px;
+    margin: 0 0 10px;
+    border: 1px solid #ccc;
+}
+</style>
+<script async="" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript">
+</script>
+<script type="text/x-mathjax-config">
+ MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$$','$$'], ['$','$'] ],
+      displayMath: [ ["\\[","\\]"] ],
+      processEscapes: true
+    }
+  });
+</script>
