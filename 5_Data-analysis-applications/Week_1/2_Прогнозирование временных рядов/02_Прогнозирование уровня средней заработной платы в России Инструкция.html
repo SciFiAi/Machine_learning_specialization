@@ -1,0 +1,114 @@
+<meta charset="utf-8"/>
+<co-content>
+ <p>
+  Для выполнения этого задания вам понадобятся данные о среднемесячных уровнях заработной платы в России:
+ </p>
+ <asset assettype="generic" extension="csv" id="9VT5soGxEeazqQoyai5dlw" name="WAG_C_M">
+ </asset>
+ <p>
+  В файле записаны данные о заработной плате за каждый месяц с января 1993 по август 2016. Если хотите, можете дописать в конец ряда данные за следующие месяцы, если они уже опубликованы; найти эти данные можно, например,
+  <a href="http://sophist.hse.ru/hse/1/tables/WAG_M.htm" title="">
+   здесь
+  </a>
+  .
+ </p>
+ <p>
+  Необходимо проанализировать данные, подобрать для них оптимальную прогнозирующую модель в классе ARIMA и построить прогноз на каждый месяц на два года вперёд от конца данных.
+ </p>
+</co-content>
+<h3 level="3">
+ Review criteria
+</h3>
+<co-content>
+ <p>
+  Придерживайтесь стандартного алгоритма построения прогноза:
+ </p>
+ <ol bullettype="numbers">
+  <li>
+   <p>
+    Визуальный анализ ряда
+   </p>
+  </li>
+  <li>
+   <p>
+    Стабилизация дисперсии (при необходимости)
+   </p>
+  </li>
+  <li>
+   <p>
+    Выбор порядка дифференцирования
+   </p>
+  </li>
+  <li>
+   <p hasmath="true">
+    Выбор начальных приближений для \(p, q, P, Q\)
+   </p>
+  </li>
+  <li>
+   <p>
+    Обучение и сравнение моделей-кандидатов, выбор победителя
+   </p>
+  </li>
+  <li>
+   <p hasmath="true">
+    Анализ остатков построенной модели, при необходимости — её модификация: если остатки получаются смещёнными, прогноз нужно скорректировать на константу; если остатки нестационарны или автокоррелированы, можно попробовать расширить область, в которой подбираются значения \(p, q, P, Q\).
+   </p>
+  </li>
+  <li>
+   <p>
+    Прогнозирование с помощью финальной модели.
+   </p>
+  </li>
+ </ol>
+ <p>
+  Сдать необходимо ipython-ноутбук с проведённым анализом; пожалуйста, комментируйте в ноутбуке каждый важный шаг построения модели.
+ </p>
+</co-content>
+<style>
+ body {
+    padding: 50px 85px 50px 85px;
+}
+
+table th, table td {
+    border: 1px solid #e0e0e0;
+    padding: 5px 20px;
+    text-align: left;
+}
+input {
+    margin: 10px;
+}
+}
+th {
+    font-weight: bold;
+}
+td, th {
+    display: table-cell;
+    vertical-align: inherit;
+}
+img {
+    height: auto;
+    max-width: 100%;
+}
+pre {
+    display: block;
+    margin: 20px;
+    background: #424242;
+    color: #fff;
+    font-size: 13px;
+    white-space: pre-wrap;
+    padding: 9.5px;
+    margin: 0 0 10px;
+    border: 1px solid #ccc;
+}
+</style>
+<script async="" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript">
+</script>
+<script type="text/x-mathjax-config">
+ MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$$','$$'], ['$','$'] ],
+      displayMath: [ ["\\[","\\]"] ],
+      processEscapes: true
+    }
+  });
+</script>
