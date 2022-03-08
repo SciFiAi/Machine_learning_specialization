@@ -1,0 +1,464 @@
+<meta charset="utf-8"/>
+<co-content>
+ <p>
+ </p>
+ <p>
+  Задача заключается в том, чтобы применить предобученную на imagenet нейронную сеть на  практической задаче классификации автомобилей.
+ </p>
+ <p>
+  Учиться применять нейронные сети для анализа изображений мы будем на библиотеке TensorFlow. Это известный опенсорсный проект, разработанный инженерами Google Brain Team. Подробнее почитать о TensorFlow можно на официальном сайте, на
+  <a href="https://github.com/tensorflow/tensorflow" title="">
+   гитхабе
+  </a>
+  или на
+  <a href="https://habrahabr.ru/post/270543/" title="">
+   хабре
+  </a>
+  .
+ </p>
+ <p>
+  <strong>
+   Установка окружения
+  </strong>
+ </p>
+ <p>
+  Необходимо установить
+  <strong>
+   TensorFlow 2.1.0
+  </strong>
+ </p>
+ <ul bullettype="bullets">
+  <li>
+   <p>
+    <a href="https://www.tensorflow.org/versions/r0.10/get_started/os_setup.html#download-and-setup" title="">
+     Инструкции по установке на сайте
+    </a>
+    .
+   </p>
+  </li>
+  <li>
+   <p>
+    Если есть опыт работы с Docker, то можно воспользоваться готовым
+    <a href="https://www.tensorflow.org/install/docker" title="">
+     докер-контейнером с тензорфлоу
+    </a>
+    . Чтобы пробросить данные в докер, можно воспользоваться флагом
+    <strong>
+     -v /src/webapp:/opt/webapp
+    </strong>
+    при запуске докер контейнера. Тогда директория на хосте
+    <strong>
+     /src/webapp
+    </strong>
+    будет доступна в контейнтере по
+    <strong>
+     /opt/webapp
+    </strong>
+    .
+   </p>
+  </li>
+ </ul>
+ <p>
+  <strong>
+   Важно!
+  </strong>
+  Если вы пользователь windows, то уставить tensorflow можно только в том случае, если вы используете Python 3.5.2 и выше. Это можно сделать с помощью команды pip install tensorflow.
+ </p>
+ <p>
+  Пользователи Windows 10 и выше могут воспользоваться
+  <strong>
+   Docker
+  </strong>
+  (
+  <a href="https://www.docker.com/products/docker#/windows" title="">
+   ссылка на дистрибутив
+  </a>
+  ).
+ </p>
+ <p>
+  Если у вас возникли проблемы по работе с Tensorflow из Docker контейнера, воспользуйтесь
+  <a href="https://github.com/ton4eg/coursera_pa/blob/master/faq/tensorflow_docker_faq.ipynb" title="">
+   F.A.Q.
+  </a>
+ </p>
+ <p>
+  Если же поставить Tensorflow на вашу машину никак не получается, мы предлагаем воспользоваться одним из облачных сервисов, в который необходимо установить линукс-образ. Самые популярные облачные сервисы
+  <a href="https://aws.amazon.com" title="">
+   AWS
+  </a>
+  и
+  <a href="http://digitalocean.com" title="">
+   DigitalOcean
+  </a>
+  предоставляют бесплатные инстансы (имейте в виду, что для того, чтобы ими воспользоваться, нужно будет привязать кредитную карту).
+ </p>
+ <p>
+  Чтобы освоить компьютерное зрение (или другие интересные задачи из области ML и AI), так или иначе придётся научиться работать с библиотеками нейронных сетей, линуксом и виртуальными серверами. Например, для более масштабных практических задач, крайне необходимы сервера с GPU, а с ними уже локально работать не получится.Тем не менее, мы понимаем, что в силу временных ограничений курса кто-то может успеть установить TensorFlow. Поэтому мы сделали пункты 1 и 2 необязательными. На оценку они не повлияют — можете сразу переходить к третьему пункту. Помимо tensorflow, потребуется библиотека
+  <strong>
+   scipy
+  </strong>
+  . Если вы уже работали с Anaconda и/или выполняли задания в нашей специализации, то она должна присутствовать.
+ </p>
+ <p>
+  <strong>
+   Данные
+  </strong>
+ </p>
+ <p>
+  Скачать данные нужно тут:
+  <a href="https://yadi.sk/d/6m_KbM4HvmLfs" title="">
+   https://yadi.sk/d/6m_KbM4HvmLfs
+  </a>
+ </p>
+ <p>
+  Данные это часть выборки
+  <em>
+   Cars Dataset
+  </em>
+  (
+  <a href="http://ai.stanford.edu/~jkrause/cars/car_dataset.html" title="">
+   link
+  </a>
+  ). Исходный датасет содержит 16,185 изображений автомобилей, принадлежащих к 196 классам. Данные разделены на 8,144 тренировочных и 8,041 тестовых изображений, при этом каждый класс разделён приблизительно поровну между тестом и трейном. Все классы уровня параметров
+  <em>
+   Марка
+  </em>
+  ,
+  <em>
+   Год
+  </em>
+  ,
+  <em>
+   Модель
+  </em>
+  и др. (например,
+  <em>
+   2012 Tesla Model S or 2012 BMW M3 coupe
+  </em>
+  ). В нашем же случае в
+  <strong>
+   train
+  </strong>
+  204 изображения, и в
+  <strong>
+   test
+  </strong>
+  — 202 изображения.
+ </p>
+ <p>
+  <strong>
+   Что делать?
+  </strong>
+  Помимо данных, потребуется скачать:
+ </p>
+ <ul bullettype="bullets">
+  <li>
+   <p>
+    <a href="https://yadi.sk/d/stFoY7JRBAUI7g" title="">
+     код
+    </a>
+   </p>
+  </li>
+  <li>
+   <p>
+    веса модели
+   </p>
+  </li>
+ </ul>
+ <p>
+ </p>
+ <asset assettype="generic" extension="ipynb" id="TwkL6TFWR6SJC-kxVrekkQ" name="vgg16">
+ </asset>
+ <p>
+ </p>
+ <p>
+ </p>
+ <ul bullettype="bullets">
+  <li>
+   <p>
+    imagenet_classes.py
+   </p>
+  </li>
+ </ul>
+ <asset assettype="generic" extension="py" id="UrXttfpBS5q17bX6QVuakA" name="imagenet_classes">
+ </asset>
+ <p>
+ </p>
+ <p>
+  Положите данные, код и модель в одну папку. У вас должна получиться такая структура:
+ </p>
+ <pre>/assignment-computer-vision/
+|
+|-- test              # папки  
+|    `---- ...        # с
+|-- train             # картинками
+|    `---- ...
+|
+|-- class_names.txt   # имена классов, номер строки соответствует id класса
+|-- results.txt       # соответствие имя картинки — id класса
+|-- vgg16_weights.npz # веса модели в формате tensorflow
+|
+|-- vgg16.ipynb            # основной скрипт
+|-- imagenet_classes.py 
+|
+`-- beach.jpg         # картиночка с пляжем</pre>
+ <h3 level="3">
+  <strong>
+   Задание 1.
+  </strong>
+ </h3>
+ <p>
+  Для начала нужно запустить готовую модель
+  <strong>
+   vgg16
+  </strong>
+  , предобученную на
+  <strong>
+   imagenet
+  </strong>
+  . Модель обучена с помощью
+  <strong>
+   caffe
+  </strong>
+  и сконвертирована в формат
+  <strong>
+   tensorflow
+  </strong>
+  -
+  <strong>
+   vgg16_weights.npz
+  </strong>
+  . Скрипт, иллюстрирующий применение этой модели к изображению, находится внутри ноутбука
+  <strong>
+   vgg16.ipynb
+  </strong>
+  и возвращает топ-5 классов из
+  <strong>
+   imagenet
+  </strong>
+  , а так же уверенность в этих классах.
+ </p>
+ <p>
+  <em>
+   <strong>
+    Задание:
+   </strong>
+  </em>
+ </p>
+ <p>
+  Загрузите уверенность первого класса для изображения
+  <strong>
+   train/00002.jpg
+  </strong>
+  с точностью до 1го знака после запятой.
+ </p>
+ <p>
+  <strong>
+   Задание 2.
+  </strong>
+ </p>
+ <p>
+  Научитесь извлекать
+  <strong>
+   fc2
+  </strong>
+  слой. Для этого нужно модифицировать
+  <strong>
+   process_image
+  </strong>
+  , чтобы вместо последнего слоя извлекались выходы
+  <strong>
+   fc2
+  </strong>
+  .
+ </p>
+ <p>
+  <strong>
+   <em>
+    Задание:
+   </em>
+  </strong>
+ </p>
+ <p>
+  Посчитайте
+  <strong>
+   fc2
+  </strong>
+  для картинки
+  <strong>
+   train/00002.jpg
+  </strong>
+  . Запишите первые 20 компонент (каждое число с новой строки, т.е. в загружаемом файле должно получиться 20 строк).
+ </p>
+ <h3 level="3">
+  <strong>
+   Задание 3.
+  </strong>
+ </h3>
+ <p>
+  Теперь необходимо дообучить классификатор на нашей базе. В качестве бейзлайна предлагается воспользоваться классификатором
+  <strong>
+   svm
+  </strong>
+  из пакета
+  <strong>
+   sklearn
+  </strong>
+  .
+ </p>
+ <ul bullettype="bullets">
+  <li>
+   <p>
+    Модифицировать функцию
+    <strong>
+     get_features
+    </strong>
+    и добавить возможность вычислять
+    <strong>
+     fc2
+    </strong>
+    . (Мы это уже сделали в
+    <strong>
+     process_image
+    </strong>
+    ).
+   </p>
+  </li>
+  <li>
+   <p>
+    Применить
+    <strong>
+     get_features
+    </strong>
+    , чтобы получить
+    <strong>
+     X_test
+    </strong>
+    и
+    <strong>
+     Y_test
+    </strong>
+    .
+   </p>
+  </li>
+  <li>
+   <p>
+    Воспользоваться классификатором,
+    <strong>
+     SVC
+    </strong>
+    с
+    <strong>
+     random_state=0
+    </strong>
+    .
+   </p>
+  </li>
+ </ul>
+ <p>
+  <strong>
+   Важно!
+  </strong>
+  Если вам не удалось поставить
+  <strong>
+   tensorflow
+  </strong>
+  , то необходимо вместо использования функции
+  <strong>
+   get_features
+  </strong>
+  , загрузить предпосчитанные
+  <strong>
+   X
+  </strong>
+  ,
+  <strong>
+   Y
+  </strong>
+  ,
+  <strong>
+   X_test
+  </strong>
+  ,
+  <strong>
+   Y_test
+  </strong>
+  и воспользоваться функцией
+  <strong>
+   np.load
+  </strong>
+  для их загрузки, а после этого два последних пункта.
+ </p>
+ <asset assettype="generic" extension="npy" id="EwVSoRR-EeemThK7E6gWvA" name="X">
+ </asset>
+ <asset assettype="generic" extension="npy" id="EwY8QBR-EeeExg76uXNxYA" name="Y">
+ </asset>
+ <asset assettype="generic" extension="npy" id="EwbY7BR-EeeD3wrfjL6qyg" name="X_test">
+ </asset>
+ <asset assettype="generic" extension="npy" id="EwdOehR-EeeJMRIiNYJxbA" name="Y_test">
+ </asset>
+ <p>
+  <strong>
+   <em>
+    Задание:
+   </em>
+  </strong>
+ </p>
+ <p>
+ </p>
+ <p>
+  Сколько правильных ответов получается на валидационной выборке из папки
+  <strong>
+   test
+  </strong>
+  ? Запишите в файл.
+ </p>
+</co-content>
+<style>
+ body {
+    padding: 50px 85px 50px 85px;
+}
+
+table th, table td {
+    border: 1px solid #e0e0e0;
+    padding: 5px 20px;
+    text-align: left;
+}
+input {
+    margin: 10px;
+}
+}
+th {
+    font-weight: bold;
+}
+td, th {
+    display: table-cell;
+    vertical-align: inherit;
+}
+img {
+    height: auto;
+    max-width: 100%;
+}
+pre {
+    display: block;
+    margin: 20px;
+    background: #424242;
+    color: #fff;
+    font-size: 13px;
+    white-space: pre-wrap;
+    padding: 9.5px;
+    margin: 0 0 10px;
+    border: 1px solid #ccc;
+}
+</style>
+<script async="" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript">
+</script>
+<script type="text/x-mathjax-config">
+ MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$$','$$'], ['$','$'] ],
+      displayMath: [ ["\\[","\\]"] ],
+      processEscapes: true
+    }
+  });
+</script>
