@@ -32,3 +32,8 @@ https://github.com/Tirren/data-analysis/tree/b884e18aded946b2161de89f9af864a5a7a
 
 
 https://github.com/AndreyBuynov/Coursera-ML-and-DA/tree/9e972eaacdd96e4a7402e67da21c8bf567dacfa2
+
+
+https://github.com/romannovikov/yandex_mipt_DS_specialization/tree/68d7e73548171a8d7044149c964ffe6c1dd39791
+
+https://github.com/Magmamane/ML-Python/tree/ce7ba21114ed8a9ea80f6d01ffd10a39005566d1/3-unsupervised-learning/week_4
